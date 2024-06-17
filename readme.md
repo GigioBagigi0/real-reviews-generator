@@ -1,0 +1,76 @@
+# ARG - ALL REVIEW GENERATOR
+
+ARG is an open-source site for generating point-based (topic) reviews for educational purposes only
+
+## Installation
+
+Use the package manager [pip](https://pip.pypa.io/en/stable/) to install all the necessary libraries.
+
+```bash
+pip install re fuzzywuzzy nltk networkx numpy scikit-learn requests beautifulsoup4 concurrent.futures flask gensim==3.8.1 spacy wikipedia googlesearch
+```
+## Usage
+To use the generator, you need to start the flask server with the following command:
+```bash
+flask run
+```
+you have to wait for the server to start, when it starts it will tell you what port it is open to (it should open to the link 127.0.0.1:5000), you should receive this message:
+```bash 
+C:\Users\yourUserName\Desktop\ARG>flask run
+ * Debug mode: off
+WARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.
+ * Running on http://127.0.0.1:5000
+Press CTRL+C to quit
+```
+than you can go to the page and see this:
+![START](/start.png "")
+
+when you have decided which product to see the review of there will be a loader, after which you will have the following screen:
+
+![out](/out.png "")
+
+you can summarize evry chategory (group of phrease) with the following button: 
+![sum](/sum.png "")
+the result is not very good but it is still a starting point
+
+there is also the possibility to insert a custom topic which for now does not support the summary function which I will implement soon
+## Conclusions
+the idea itself is fantastic in my opinion but unfortunately it is not possible to take data from other sites without their consent to use them like this. It would also be nice to create a normal review site... it would be very useful but a large initial community would be needed for this reason I decided to create this project even if it is not possible to publish this site online... right now the output is not the best but it would be enough to use a more sophisticated artificial intelligence using the APIs of GPT3.5/llama/gemini etc, I decided to use transformers.js because it is a very interesting and very light project without the need for server-side artificial intelligence (not counting the models for word embeddings)
+
+soon the code will be fully commented and translated entirely into English
+## Other to know/problems
+there is a possibility that you can have problems with the gensim library having problems with the collections library, just manually edit the files (they will be reported as an error) and one by one you will have to manually edit an import, if I remember there is a problem that certain things must be imported from collection and others from collection.abc so you just need to find the "right combination" it does not take much time to solve this problem and this is told to you by a programmer who when he encountered this error did not know much about it, there are also various online forums that talk about it.
+
+for example in this file (fasttext.py) by default there would be "from collection import ..." but it doesn't work most likely because of the older version of gensim and you have to use collection.abc as in the image
+![p](/colProblems.png 'p')
+
+<span style="font-size:larger;">AS OF NOW IT IS NOT FINISHED AND ONLINE PUBLICATION IS NOT POSSIBLE AS IT DOES NOT RESPECT COPYRIGHT AND VARIOUS COPYRIGHTS SO THIS PROJECT IS ONLY AN EDUCATIONAL PURPOSE PROJECT</span>
+
+## Contributing
+
+FOR SUGGESTIONS/IMPROVEMENTS/COLLABORATION REQUEST GO TO THIS LINK: 
+
+https://forms.gle/tV1i3YbnB6A9iJsT7
+
+## License
+Licenza del MIT
+
+Diritto d'autore (c) 2024 GigioBagigi0
+
+L'autorizzazione è concessa, gratuitamente, a chiunque ne ottenga una copia
+di questo software e dei file di documentazione associati (il "Software"), da trattare
+nel Software senza restrizioni, inclusi senza limitazione i diritti
+utilizzare, copiare, modificare, unire, pubblicare, distribuire, concedere in sublicenza e/o vendere
+copie del Software e per consentire alle persone a cui è destinato il Software
+attrezzato per farlo, alle seguenti condizioni:
+
+L'avviso di copyright di cui sopra e il presente avviso di autorizzazione devono essere inclusi in tutti
+copie o parti sostanziali del Software.
+
+IL SOFTWARE VIENE FORNITO "COSÌ COM'È", SENZA GARANZIA DI ALCUN TIPO, ESPRESSA O
+IMPLICITE, INCLUSE MA NON LIMITATE ALLE GARANZIE DI COMMERCIABILITÀ,
+IDONEITÀ PER UNO SCOPO PARTICOLARE E NON VIOLAZIONE. IN NESSUN CASO IL
+GLI AUTORI O I DETENTORI DEL COPYRIGHT SARANNO RESPONSABILI PER QUALSIASI RECLAMO, DANNI O ALTRO
+RESPONSABILITÀ, SIA IN AZIONE CONTRATTUALE, ILLECITA O ALTRIMENTI, DERIVANTE DA:
+DA O IN CONNESSIONE CON IL SOFTWARE O L'UTILIZZO O ALTRI RAPPORTI IN
+SOFTWARE.
