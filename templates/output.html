@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">    
+    <link rel="stylesheet" href="{{ url_for('static', filename='styleout.css') }}">
+    <title>REVIEW</title>
+    <script type="module">
+        import { pipeline } from 'https://cdn.jsdelivr.net/npm/@xenova/transformers@2.14.2';
+        window.pipeline = pipeline;
+
+        let summarizer;
+
+        // Initialize the summarization model
+        async function initializeModel() {
+            summarizer = await pipeline('summarization', 'Xenova/t5-small');
+        }
+
+        window.summarizeText = async function(text, outputElementId) {
+            try {
+                // Create and show the loader
+                const loader = document.createElement('div');
+                loader.id = 'loader';
+                loader.style.position = 'fixed';
+                loader.style.left = '50%';
+                loader.style.top = '50%';
+                loader.style.transform = 'translate(-50%, -50%)';
+                loader.style.zIndex = '9999';
+                loader.style.fontSize = '20px';
+                loader.style.color = '#3498db';
+                loader.innerText = 'Loading...';
+                document.body.appendChild(loader);
+
+                const outputElement = document.getElementById(outputElementId);
+                if (!outputElement) {
+                    throw new Error(`Element with ID '${outputElementId}' not found.`);
+                }
+
+                // Calculate the number of tokens in the input text
+                const tokenCount = text.trim().split(/\s+/).length;
+
+                // Set max_new_tokens to a higher value to generate a longer summary
+                const maxNewTokens = Math.ceil(tokenCount * 2); // Increasing the multiplier
+
+                // Split the text into chunks if it's too long
+                const maxChunkSize = 200; // Adjust the chunk size as needed
+                const words = text.split(/\s+/);
+                const chunks = [];
+                for (let i = 0; i < words.length; i += maxChunkSize) {
+                    chunks.push(words.slice(i, i + maxChunkSize).join(' '));
+                }
+
+                let summaryText = '';
+
+                for (const chunk of chunks) {
+                    const summary = await summarizer(chunk, { max_new_tokens: maxNewTokens, do_sample: true, top_k: 50 });
+                    summaryText += summary[0]['summary_text'] + ' ';
+                }
+
+                // Print the summarized text to the console
+                console.log("Summarized text: ", summaryText);
+
+                // Create a new div element for the summary
+                const summaryDiv = document.createElement('div');
+                summaryDiv.classList.add('summary-box');
+                summaryDiv.innerHTML = `<h3>Summary:</h3><p>${summaryText}</p>`;
+
+                // Append the new summary div to the document
+                outputElement.appendChild(summaryDiv);
+            } catch (error) {
+                console.error('Error in summarizeText:', error);
+            } finally {
+                // Remove the loader
+                const loader = document.getElementById('loader');
+                if (loader) {
+                    document.body.removeChild(loader);
+                }
+            }
+        }
+
+
+        window.addEventListener("DOMContentLoaded", initializeModel);
+    </script>
+    <style>
+        .summary-box {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-top: 10px;
+        }
+        .summary-box h3 {
+            margin-top: 0;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        window.addEventListener('scroll', function() {
+            var navbar = document.querySelector('.navbar');
+            var reviewText = document.querySelector('.navbar-item.review-text');
+            var productName = document.querySelector('.navbar-item.product-name');
+            var stars = document.querySelector('.navbar-item.stars');
+            var star = document.getElementById('star');
+            var pr_name = document.getElementById('name');
+    
+            if (window.scrollY > 0) {
+                navbar.classList.add('show');
+                reviewText.classList.add('show');
+                productName.classList.add('show');
+                stars.classList.add('show');
+                star.style.display = 'none';
+                pr_name.style.display = 'none';
+            } else {
+                navbar.classList.remove('show');
+                reviewText.classList.remove('show');
+                productName.classList.remove('show');
+                stars.classList.remove('show');
+                star.style.display = 'block';
+                pr_name.style.display = 'block';
+            }
+        });
+    </script>
+    <div class="navbar">
+        <div class="navbar-left navbar-item review-text">REVIEW</div>
+        <div class="navbar-center navbar-item product-name"><h1>{{ pr }}</h1></div>
+        <div class="navbar-right">
+            <h1 class="star-nav navbar-item stars">{{ star }}<img src="{{ url_for('static', filename='favicon.ico') }}" style="margin-left: 0;"></h1>
+        </div>
+    </div>
+
+    <div class="prodotto_nome_titolo">
+        <h1 class="r">REVIEW</h1>
+        <h1 id="name">{{ pr }}</h1>
+        <div class="sm">
+            <h2 id="star" class="star"><img src="{{ url_for('static', filename='favicon.ico') }}" style="margin-left: 0;"></h2>
+        </div>
+    </div>
+    
+    <div class="div-out" style="align-items: center; text-align: center;">
+        <h2 id="topicp"></h2>
+        <div class="frasi" style="padding: 20px;">
+            {% for n, v, c in terall %}
+                <a class="source-link {{ c }}" href="{{ v }}" data-value="{{ v }}" style="display: none;">{{ n }}</a>
+            {% endfor %}
+            <br>
+            <div class="container">
+                <input id="txtfta" required type="text" name="text" class="input" style="text-align: center;">
+                <label class="label">topic personalizzato</label>
+                <div id="resultContainer"></div>
+            </div>
+            <button id="btnta" onclick="rb()" class="btnp"> <span class="text">topic personalizzato</span>
+                <span class="blob"></span>
+                <span class="blob"></span>
+                <span class="blob"></span>
+                <span class="blob"></span>
+            </button>
+        </div>
+    </div>
+    <!------------------------------------------------>
+    <div class="columns">
+        {% for topic, data_list in data_set.items() %}
+        <div class="column" id="column-{{ loop.index-1 }}">
+            <div class="div-out">
+                <h2 style="padding: 10px;"><strong>{{ topic }}</strong></h2><br>
+                <div style="padding: 0 7% 7% 7%;">
+                    {% set combined_text = "" %}
+                    {% for data_item in data_list %}
+                        {% set combined_text = combined_text + data_item[0] + " " %}
+                        <a href="{{ data_item[1] }}" class="{{ data_item[2] }} {{ topic|replace(' ', '_') }} data-item" style="color: black; {% if loop.index >= 5 %} display: none; {% endif %}">{{ data_item[0] }}</a><br class="data-item" style="{% if loop.index >= 5 %} display: none; {% endif %}">
+                    {% endfor %}
+                    <!-- Use a data attribute to pass the combined text to JavaScript -->
+                    <div id="summary-{{ loop.index-1 }}" class="topic"></div>
+                    <button class="btnp" data-combined-text="{{ ct[loop.index-1] | e }}" onclick="summarizeText(this.getAttribute('data-combined-text'), 'summary-{{ loop.index-1 }}')">
+                        <div class="text">Summarize</div>
+                        <div class="blob"></div>
+                        <div class="blob"></div>
+                        <div class="blob"></div>
+                        <div class="blob"></div>
+                    </button>
+                </div>
+            </div>
+            <button onclick="showMore('column-{{ loop.index-1 }}')" class="mostraltro"><b>show more</b></button>
+        </div>
+        {% endfor %}
+    </div>
+
+    
+     <!------------------------------------------------>
+    
+    <script>
+        function showMore(id) {
+            const column = document.getElementById(id);
+            const data_items = column.querySelectorAll(".data-item");
+
+            let visibleCount = 0;
+
+            data_items.forEach(item => {
+                if (item.style.display === "none" && visibleCount < 5) {
+                    item.style.display = "inline";
+                    visibleCount++;
+                }
+            });
+        }
+
+        var topicp = document.getElementById("topicp");
+        var txtfta = document.getElementById("txtfta");
+        function rb() {
+            topicp.textContent = txtfta.value;
+        }
+
+        const resultContainer = document.getElementById("resultContainer");
+        const btnSearch = document.getElementById("btnta");
+
+        btnSearch.addEventListener("click", function () {
+            const keyword = document.getElementById("txtfta").value.toLowerCase();
+            resultContainer.innerHTML = ""; // Clear previous results
+
+            const links = document.querySelectorAll(".source-link");
+
+            links.forEach(link => {
+                const text = link.innerHTML.toLowerCase();
+
+                // Check if the keyword is present in the text
+                if (text.indexOf(keyword) !== -1) {
+                    const newLink = document.createElement("a");
+                    newLink.href = link.href;
+                    newLink.innerHTML = link.innerHTML;
+                    newLink.className = link.className;
+                    resultContainer.appendChild(newLink);
+                    resultContainer.appendChild(document.createElement("br"));
+                }
+            });
+
+            if (resultContainer.childElementCount === 0) {
+                resultContainer.textContent = "Nessun risultato trovato.";
+            }
+        });
+    </script>
+    <!--<p>{{ intro }}</p>-->
+</body>
+</html>
