@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="icon" href="{{ favicon_url }}" type="image/x-icon">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>REVIEW GENERATOR</title>
+    <style>
+        ::-webkit-scrollbar {
+            width: 7.5px;
+        }
+        ::-webkit-scrollbar-thumb {
+            border-radius: 13px;
+            -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+            background-color: #8b87879e;
+        } 
+        scrollbar {
+            width: 12px;
+        }
+        scrollbar thumb {
+            border-radius: 10px;
+            --moz-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
+            background-color: #8b87879e;
+        }
+
+        
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 80%;
+            max-width: 500px;
+        }
+        
+        h1 {
+            margin-bottom: 20px;
+        }
+        
+        .form {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        label {
+            margin-bottom: 10px;
+        }
+        
+        input {
+            padding: 8px 10px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            background-color: yellow;
+            cursor: pointer;
+        }
+        
+        .loader {
+            display: none;
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid yellow;
+            border-radius: 50%;
+            animation: spin 2s linear infinite;
+            margin-bottom: 20px;
+        }
+        
+        .review {
+            display: none;
+            text-align: center;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .adv {
+            background-color: white;
+            border: none;
+        }
+        .topic-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .topic-container .lbl {
+            margin-right: 5px;
+        }
+        .input-text {
+            vertical-align: baseline;
+        }
+
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>REVIEW GENERATOR</h1>
+        <div class="form">
+            <form method="POST" action="/">
+              <label for="product">Product:</label>
+              <input class="input1 input-text" type="text" id="product" name="titolo" value="{{ request.form['titolo'] }}" placeholder="product name...">
+              <button id="generate-btn" type="submit" class="btn">GENERATE</button>
+              <div class="topic-container">
+                <label for="product_adv" id="topic_lbl" style="display: none;" class="lbl">Topic:</label>
+                <input type="text" id="product_adv" name="adv" value="{{ request.form['adv'] }}" style="display: none;" class="inp_advanced input-text" placeholder="specific argument...">
+                <label for="length" style="margin-left: 5px; display: none;" id="length_lbl">Lenght:</label>
+                <input name="length" id="length" type="range" min="20" max="100" value="{{ request.form['length'] }}" id="myRange" style="margin: 0; padding: 0; margin-top: -8px; display: none;">
+
+
+
+              </div>
+            </form>
+        </div>
+          
+        <div class="loader"></div>
+
+        <div class="review hidden">
+            <label for="review">Review:</label>
+            <p id="review"> {{ titolo }}</p>
+        </div>
+    </div>
+    <script>
+        const productInput = document.getElementById('product');
+        const generateBtn = document.getElementById('generate-btn');
+        const loader = document.querySelector('.loader');
+        const reviewDiv = document.querySelector('.review');
+        const reviewText = document.getElementById('review');
+
+        generateBtn.addEventListener('click', () => {
+            const product = productInput.value;
+            if (product) {
+                loader.style.display = 'block';
+            }
+        });
+
+    </script>
+    
+</body>
+</html>
