@@ -23,7 +23,7 @@ WARNING: This is a development server. Do not use it in a production deployment.
 Press CTRL+C to quit
 ```
 than you can go to the page and see this:
-![START](/start.png "")
+![START](/START.png "")
 
 when you have decided which product to see the review of there will be a loader, after which you will have the following screen:
 
