@@ -7,7 +7,7 @@ ARG is an open-source site for generating point-based (topic) reviews for educat
 Use the package manager [pip](https://pip.pypa.io/en/stable/) to install all the necessary libraries.
 
 ```bash
-pip install re fuzzywuzzy nltk networkx numpy scikit-learn requests beautifulsoup4 concurrent.futures flask gensim==3.8.1 spacy wikipedia googlesearch
+pip install fuzzywuzzy nltk networkx numpy scikit-learn requests beautifulsoup4 concurrent.futures flask gensim==3.8.1 spacy wikipedia googlesearch
 ```
 ## Usage
 To use the generator, you need to start the flask server with the following command:
