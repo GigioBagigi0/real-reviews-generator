@@ -1,6 +1,6 @@
 # ARG - ALL REVIEW GENERATOR
 
-ARG is an open-source site for generating point-based (topic) reviews for educational purposes only
+ARG is an open-source site for generating point-based (topic) real reviews for educational purposes only
 
 ## Installation
 
